@@ -49,3 +49,5 @@ yarn run start
 yarn run test
 ```
 There are 4 unit tests written for the application
+
+After starting the application locally, navigate to the */graphql* endpoint, at the appropriate localhost port, in your browser to view the GraphQL playground.
