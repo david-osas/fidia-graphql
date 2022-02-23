@@ -10,6 +10,7 @@ import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   Config,
 } from "apollo-server-core";
+import { connectToDB } from "./loaders/database";
 
 const httpServer = http.createServer(app);
 const server = new ApolloServer({
@@ -27,6 +28,8 @@ async function startServer() {
   await server.start();
 
   server.applyMiddleware({ app });
+
+  connectToDB();
 
   const port = process.env.PORT || 3000;
   httpServer.listen(port, () => {

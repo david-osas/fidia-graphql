@@ -1,15 +1,20 @@
-export interface User {
-  name: string;
+export interface IUser {
+  firstName: string;
+  lastName: string;
   email: string;
   mobileNumber: string;
   country: string;
   isVerified: boolean;
   password: string;
-  verificationToken: string;
+  verifyToken: string;
+  verifyTokenExpires: Date | null;
+  validatePassword: (password: string, userPassword: string) => boolean;
+  generateToken: () => string;
 }
 
 export interface NewUser {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   mobileNumber: string;
@@ -19,6 +24,11 @@ export interface NewUser {
 export interface LoginUserArgs {
   email: string;
   password: string;
+}
+
+export interface LoginResponse {
+  data: IUser;
+  token: string;
 }
 
 export interface VerifyUserArgs {
