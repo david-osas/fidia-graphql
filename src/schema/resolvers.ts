@@ -5,17 +5,6 @@ import AppError from "../error/appError";
 import { ApolloError } from "apollo-server-errors";
 import crypto from "crypto";
 
-// const dummyUsers: NewUser[] = [
-//   {
-//     firstName: "osarumense",
-//     lastName: "azamegbe",
-//     email: "osas@gmail.com",
-//     mobileNumber: "0802333333",
-//     country: "nga",
-//     password: "dummypassword",
-//   },
-// ];
-
 const resolvers = {
   Query: {
     async getAllUsers(): Promise<IUser[] | ApolloError> {
