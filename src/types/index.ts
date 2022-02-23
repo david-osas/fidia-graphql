@@ -6,10 +6,14 @@ export interface IUser {
   country: string;
   isVerified: boolean;
   password: string;
-  verifyToken: string;
+  verifyToken: string | null;
   verifyTokenExpires: Date | null;
-  validatePassword: (password: string, userPassword: string) => boolean;
+  validatePassword: (
+    password: string,
+    userPassword: string
+  ) => Promise<boolean>;
   generateToken: () => string;
+  sendVerificationEmail: () => Promise<boolean>;
 }
 
 export interface NewUser {
@@ -29,9 +33,4 @@ export interface LoginUserArgs {
 export interface LoginResponse {
   data: IUser;
   token: string;
-}
-
-export interface VerifyUserArgs {
-  token: string;
-  email: string;
 }

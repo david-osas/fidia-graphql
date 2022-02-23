@@ -2,12 +2,16 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { IUser } from "../types";
+import { sendEmail } from "../utils/email";
+import Mail from "nodemailer/lib/mailer";
 
 const saltRounds = 10;
 const passwordLength = 6;
 const jwtSecret: string = process.env.JWT_SECRET as string;
-const jwtDuration = "1h";
+const jwtDuration = process.env.JWT_DURATION as string;
+const tokenHours = 1;
 
 const userSchema = new Schema<IUser>(
   {
@@ -48,7 +52,6 @@ const userSchema = new Schema<IUser>(
     },
     verifyToken: {
       type: String,
-      default: "",
     },
     verifyTokenExpires: {
       type: Date,
@@ -64,6 +67,30 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, saltRounds);
   next();
 });
+
+userSchema.methods.sendVerificationEmail = async function () {
+  const token = crypto.randomBytes(12).toString("hex");
+  this.verifyToken = crypto.createHash("sha256").update(token).digest("hex");
+  const expiryDate = new Date();
+  expiryDate.setHours(expiryDate.getHours() + tokenHours);
+  this.verifyTokenExpires = expiryDate;
+
+  await this.save();
+
+  const verifyUrl = `https://fidia.org/auth/verify/${token}`;
+
+  const data: Mail.Options = {
+    from: "fidia@example.com",
+    to: this.email,
+    subject: "Account verification",
+    html: `<p>This email was sent to verify your account. The verification token will expire in ${tokenHours} hour(s)</p>
+     <a href='${verifyUrl}'>Click on this link to verify your account</a> 
+      <p>or copy this url <em>${verifyUrl}</em> into a new tab</p>
+      `,
+  };
+
+  return await sendEmail(data);
+};
 
 userSchema.methods.validatePassword = async function (
   password: string,

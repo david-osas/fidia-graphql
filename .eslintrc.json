@@ -10,7 +10,7 @@
   ],
   "rules": {
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
-    "no-console": ["warn", { "allow": ["error"] }],
+    "no-console": ["warn", { "allow": ["error", "log"] }],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"]
   }
