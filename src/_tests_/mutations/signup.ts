@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import dotenv from "dotenv";
+dotenv.config();
 process.env.NODE_ENV = "test";
 
 import { ApolloServer } from "apollo-server-express";

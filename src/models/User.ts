@@ -3,9 +3,8 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { IUser } from "../types";
+import { Email, IUser } from "../types";
 import { sendEmail } from "../utils/email";
-import Mail from "nodemailer/lib/mailer";
 
 const saltRounds = 10;
 const passwordLength = 6;
@@ -79,9 +78,9 @@ userSchema.methods.sendVerificationEmail = async function () {
 
   const verifyUrl = `https://fidia.org/auth/verify/${token}`;
 
-  const data: Mail.Options = {
+  const data: Email = {
     from: "fidia@example.com",
-    to: this.email,
+    to: [this.email],
     subject: "Account verification",
     html: `<p>This email was sent to verify your account. The verification token will expire in ${tokenHours} hour(s)</p>
      <a href='${verifyUrl}'>Click on this link to verify your account</a> 
